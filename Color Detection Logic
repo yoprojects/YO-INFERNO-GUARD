@@ -1,0 +1,27 @@
+import smbus
+
+# I2C bus setup for color sensor
+bus = smbus.SMBus(1)
+COLOR_SENSOR_ADDRESS = 0x29
+
+def read_color_data():
+    # Function to read RGB values
+    red = bus.read_byte_data(COLOR_SENSOR_ADDRESS, 0x16)
+    green = bus.read_byte_data(COLOR_SENSOR_ADDRESS, 0x18)
+    blue = bus.read_byte_data(COLOR_SENSOR_ADDRESS, 0x1A)
+    return red, green, blue
+
+def detect_color():
+    red, green, blue = read_color_data()
+    if red > green and red > blue:
+        return "Red"
+    elif green > red and green > blue:
+        return "Green"
+    elif blue > red and blue > green:
+        return "Blue"
+    else:
+        return "Unknown"
+
+# Example usage
+color = detect_color()
+print(f"Detected Color: {color}")
